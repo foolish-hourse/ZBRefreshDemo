@@ -12,7 +12,7 @@
 
 @interface UIScrollView()
 ///刷新状态
-@property (nonatomic, strong) NSNumber *zb_refreshState;
+@property (nonatomic, assign) ZB_RefreshState zb_refreshState;
 ///滚动视图偏移量
 @property (nonatomic, assign) CGFloat zb_offsetHeight;
 @end
@@ -33,12 +33,12 @@
 
 ///开始刷新
 - (void)zb_beginRefresh {
-    self.zb_refreshState = @(ZB_RefreshStateWillBeginRefresh);
+    self.zb_refreshState = ZB_RefreshStateWillBeginRefresh;
 }
 
 ///结束刷新
 - (void)zb_endRefresh {
-    self.zb_refreshState = @(ZB_RefreshStateWillEndLoad);
+    self.zb_refreshState = ZB_RefreshStateWillEndLoad;
 }
 
 #pragma mark - private methods
@@ -89,23 +89,16 @@
     objc_setAssociatedObject(self, @selector(setZb_offsetHeight:), value, OBJC_ASSOCIATION_RETAIN);
 }
 
-- (void)setZb_refreshState:(NSNumber *)zb_refreshState {
-    objc_setAssociatedObject(self, @selector(zb_refreshState), zb_refreshState, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-//    [self willChangeValueForKey:NSStringFromSelector(@selector(add))];
-//    
-//    //区别在这里，区别在这里
-//    NSValue *value = [NSValue value:&add withObjCType:@encode(CGFloat)];
-//    objc_setAssociatedObject(self, _cmd, value, OBJC_ASSOCIATION_RETAIN);
-//    
-//    [self didChangeValueForKey:NSStringFromSelector(@selector(add))];
+- (void)setZb_refreshState:(ZB_RefreshState)zb_refreshState {
+    NSValue *value = [NSValue value:&zb_refreshState withObjCType:@encode(ZB_RefreshState)];
+    objc_setAssociatedObject(self, @selector(setZb_refreshState:), value, OBJC_ASSOCIATION_RETAIN);
     
-
     if (self.contentOffset.y < self.zb_offsetHeight) {//下拉
-        self.zb_headerView.refreshState = [zb_refreshState integerValue];
+        self.zb_headerView.refreshState = zb_refreshState;
     }else {//上拉
-        self.zb_footerView.refreshState = [zb_refreshState integerValue];
+        self.zb_footerView.refreshState = zb_refreshState;
     }
-    switch ([zb_refreshState integerValue]) {
+    switch (zb_refreshState) {
         case ZB_RefreshStateNormal:{
             [UIView animateWithDuration:0.5 animations:^{
                 self.contentInset = UIEdgeInsetsMake(-self.zb_offsetHeight, 0, 0, 0);
@@ -155,7 +148,7 @@
             break;
         }
         default:
-            NSLog(@"未知状态：%@",zb_refreshState);
+            NSLog(@"未知状态：%ld",zb_refreshState);
             break;
     }
 }
@@ -184,23 +177,36 @@
     return cValue;
 }
 
-- (NSNumber *)zb_refreshState {
-    return objc_getAssociatedObject(self, @selector(zb_refreshState));
+- (ZB_RefreshState)zb_refreshState {
+    ZB_RefreshState cValue = {0};
+    NSValue *value = objc_getAssociatedObject(self, @selector(setZb_refreshState:));
+    [value getValue:&cValue];
+    return cValue;
 }
 
 #pragma mark - kvo methods
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     if ([keyPath isEqualToString:@"contentOffset"]) {
+        CGFloat percent_length = self.zb_offsetHeight - self.contentOffset.y;
+        if (percent_length >= 0 && percent_length <= zb_headHeight) {
+            if (zb_headHeight == 0) {
+                NSLog(@"头部高度不能为0");
+                return;
+            }
+            CGFloat percent = percent_length / zb_headHeight;
+            NSLog(@"percent:%lf",percent);
+        }
+        
         if (self.dragging) {// 拖拽
 //            NSLog(@"dragging:%lf",self.contentOffset.y);
-            if ([self.zb_refreshState integerValue] == ZB_RefreshStateRefreshing) {
+            if (self.zb_refreshState == ZB_RefreshStateRefreshing) {
                 return;
             }
             if (self.contentOffset.y < self.zb_offsetHeight) {// 处理下拉刷新
                 if (self.contentOffset.y < -zb_headHeight + self.zb_offsetHeight) {// 拉到触发下拉刷新的临界位置 改变刷新状态
-                    self.zb_refreshState = @(ZB_RefreshStateWillBeginRefresh);
+                    self.zb_refreshState = ZB_RefreshStateWillBeginRefresh;
                 }else {// 未拉到临界位置
-                    self.zb_refreshState = @(ZB_RefreshStateNormal);
+                    self.zb_refreshState = ZB_RefreshStateNormal;
                 }
             }else {// 处理上拉加载
                 CGFloat offsetY = self.contentOffset.y;
@@ -212,16 +218,16 @@
                 }
 //                NSLog(@"offsetY:%lf,loadY:%lf\n%@",offsetY,load_Y,self);
                 if (load_Y > zb_footerHeight + self.zb_offsetHeight) {// 拉到触发上拉刷新的临界位置 改变刷新状态
-                    self.zb_refreshState = @(ZB_RefreshStateWillBeginRefresh);
+                    self.zb_refreshState = ZB_RefreshStateWillBeginRefresh;
                 }else {// 未拉到临界位置
-                    self.zb_refreshState = @(ZB_RefreshStateNormal);
+                    self.zb_refreshState = ZB_RefreshStateNormal;
                 }
             }
         }else {///松手
-            if ([self.zb_refreshState integerValue] == ZB_RefreshStateWillBeginRefresh) {
-                self.zb_refreshState = @(ZB_RefreshStateRefreshing);
+            if (self.zb_refreshState == ZB_RefreshStateWillBeginRefresh) {
+                self.zb_refreshState = ZB_RefreshStateRefreshing;
             }
-            if ([self.zb_refreshState integerValue] == ZB_RefreshStateNormal) {//初始化的时候读取当前contentoffset是否被设置过 很重要！！！
+            if (self.zb_refreshState == ZB_RefreshStateNormal) {//初始化的时候读取当前contentoffset是否被设置过 很重要！！！
                 NSLog(@"contentSizexxx:%@",self);
                 self.zb_offsetHeight = self.contentOffset.y;
             }

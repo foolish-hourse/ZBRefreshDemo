@@ -9,6 +9,7 @@
 #import "ViewController.h"
 
 #import "ZBRefresh.h"
+#import "ZBRefreshTool.h"
 
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate>
 ///列表视图
@@ -22,7 +23,7 @@
 #pragma mark - lazy load
 - (UITableView *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height) style:UITableViewStylePlain];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height - 49) style:UITableViewStylePlain];
         [self.view addSubview:_tableView];
         _tableView.delegate = self;
         _tableView.dataSource = self;
@@ -71,7 +72,8 @@
             [weakSelf.tableView zb_endRefresh];
         });
     }];
-//    [self.tableView zb_beginRefresh];
+//    [ZBRefreshTool zb_getNavInfoByView:self.tableView];
+    //    [self.tableView zb_beginRefresh];
 }
 
 #pragma mark - init methods

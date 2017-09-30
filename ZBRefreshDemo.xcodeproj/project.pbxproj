@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		17CC70B11F67E49B00037C10 /* ZBHeaderRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17CC70B01F67E49B00037C10 /* ZBHeaderRefreshView.m */; };
 		17CC70B41F67E4AB00037C10 /* ZBFooterRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 17CC70B31F67E4AB00037C10 /* ZBFooterRefreshView.m */; };
+		17EB54B51F7F397B00CB5273 /* ZBRefreshTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 17EB54B41F7F397B00CB5273 /* ZBRefreshTool.m */; };
 		17ED38751F66932000B9700C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 17ED38741F66932000B9700C /* main.m */; };
 		17ED38781F66932000B9700C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 17ED38771F66932000B9700C /* AppDelegate.m */; };
 		17ED387B1F66932000B9700C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 17ED387A1F66932000B9700C /* ViewController.m */; };
@@ -43,6 +44,8 @@
 		17CC70B21F67E4AB00037C10 /* ZBFooterRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZBFooterRefreshView.h; sourceTree = "<group>"; };
 		17CC70B31F67E4AB00037C10 /* ZBFooterRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZBFooterRefreshView.m; sourceTree = "<group>"; };
 		17E4713A1F6A73A9001D6557 /* ZBRefreshConfig.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBRefreshConfig.h; sourceTree = "<group>"; };
+		17EB54B31F7F397B00CB5273 /* ZBRefreshTool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZBRefreshTool.h; sourceTree = "<group>"; };
+		17EB54B41F7F397B00CB5273 /* ZBRefreshTool.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZBRefreshTool.m; sourceTree = "<group>"; };
 		17ED38701F66931F00B9700C /* ZBRefreshDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZBRefreshDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		17ED38741F66932000B9700C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		17ED38761F66932000B9700C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -157,6 +160,8 @@
 			children = (
 				17ED38A71F6696C100B9700C /* UIScrollView+ZBRefresh.h */,
 				17ED38A81F6696C100B9700C /* UIScrollView+ZBRefresh.m */,
+				17EB54B31F7F397B00CB5273 /* ZBRefreshTool.h */,
+				17EB54B41F7F397B00CB5273 /* ZBRefreshTool.m */,
 				17CC70AF1F67E49B00037C10 /* ZBHeaderRefreshView.h */,
 				17CC70B01F67E49B00037C10 /* ZBHeaderRefreshView.m */,
 				17CC70B21F67E4AB00037C10 /* ZBFooterRefreshView.h */,
@@ -229,7 +234,7 @@
 		17ED38681F66931F00B9700C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = YZL;
 				TargetAttributes = {
 					17ED386F1F66931F00B9700C = {
@@ -302,6 +307,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				17CC70B11F67E49B00037C10 /* ZBHeaderRefreshView.m in Sources */,
+				17EB54B51F7F397B00CB5273 /* ZBRefreshTool.m in Sources */,
 				17ED387B1F66932000B9700C /* ViewController.m in Sources */,
 				17ED38A91F6696C100B9700C /* UIScrollView+ZBRefresh.m in Sources */,
 				17ED38781F66932000B9700C /* AppDelegate.m in Sources */,
@@ -371,6 +377,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -418,6 +425,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
