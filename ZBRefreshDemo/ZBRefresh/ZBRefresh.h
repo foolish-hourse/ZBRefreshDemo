@@ -7,3 +7,7 @@
 //
 
 #import "UIScrollView+ZBRefresh.h"
+#import "ZBHeaderRefreshView.h"
+#import "ZBFooterRefreshView.h"
+#import "ZBHeaderNormalRefreshView.h"
+#import "ZBFooterNormalRefreshView.h"

@@ -16,28 +16,29 @@
 @implementation ZBHeaderRefreshView
 
 #pragma mark - init
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
-        [self addSubview:titleLabel];
-        titleLabel.textColor = [UIColor blackColor];
-        titleLabel.font = [UIFont systemFontOfSize:15];
-        titleLabel.textAlignment = NSTextAlignmentCenter;
-        _titleLabel = titleLabel;
-        
-        UIButton *button = [[UIButton alloc] initWithFrame:titleLabel.bounds];
-        [self addSubview:button];
-        [button addTarget:self action:@selector(buttonClick:) forControlEvents:UIControlEventTouchUpInside];
-        
+- (instancetype)init {
+    if (self = [super init]) {
+        self.frame = CGRectMake(0, -zb_headRefreshHeight, 0, zb_headRefreshHeight);
+        [self initSubView];
         ///设置默认的状态
         self.refreshState = ZB_RefreshStateNormal;
     }
     return self;
 }
 
+- (void)initSubView {
+    // TODO 内部视图布局
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, zb_headRefreshHeight)];
+    [self addSubview:titleLabel];
+    titleLabel.textColor = [UIColor blackColor];
+    titleLabel.font = [UIFont systemFontOfSize:15];
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    _titleLabel = titleLabel;
+}
+
 #pragma mark - set methods
 - (void)setRefreshState:(ZB_RefreshState)refreshState {
-    _refreshState = refreshState;
+    [super setRefreshState:refreshState];
     switch (refreshState) {
         case ZB_RefreshStateNormal:
             _titleLabel.text = @"普通状态";
@@ -55,11 +56,6 @@
             _titleLabel.text = @"未知状态";
             break;
     }
-}
-
-#pragma mark - SEL
-- (void)buttonClick:(UIButton *)sender {
-    self.testBlock();
 }
 
 @end

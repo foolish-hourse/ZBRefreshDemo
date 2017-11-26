@@ -10,6 +10,6 @@
 #import <UIKit/UIKit.h>
 
 @interface ZBRefreshTool : NSObject
-/// 根据传入的view
+///根据view获取当前控制器的导航栏加电池栏高度
 + (CGFloat)zb_getNavHeightByView:(UIView *)view;
 @end
