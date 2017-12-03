@@ -19,5 +19,9 @@
 @property (nonatomic , strong) ZBRefreshBaseView *zb_headerView;
 ///刷新尾部视图
 @property (nonatomic , strong) ZBRefreshBaseView *zb_footerView;
+///滚动视图偏移量
+@property (nonatomic, assign) CGFloat zb_offsetHeight;
+///开始刷新
+//- (void)zb_beginRefresh;
 
 @end

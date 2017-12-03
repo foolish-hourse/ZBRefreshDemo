@@ -11,8 +11,7 @@
 #import <objc/runtime.h>
 
 @interface UIScrollView()
-///滚动视图偏移量
-@property (nonatomic, assign) CGFloat zb_offsetHeight;
+
 @end
 
 @implementation UIScrollView (ZBRefresh)
@@ -82,30 +81,29 @@
     //整体视图的状态改变
     switch (zb_refreshState) {
         case ZB_RefreshStateNormal:{
-            [UIView animateWithDuration:zb_normalAnimationDuration animations:^{
-                self.contentInset = UIEdgeInsetsMake(-self.zb_offsetHeight, 0, 0, 0);
-            }];
             break;
         }
         case ZB_RefreshStateWillBeginRefresh:{
             break;
         }
         case ZB_RefreshStateRefreshing:{
-            if (self.dragging) {
-                return;
-            }
+//            if (self.dragging) {
+//                return;
+//            }
             if (self.contentOffset.y < self.zb_offsetHeight) {//下拉
                 [UIView animateWithDuration:zb_normalAnimationDuration animations:^{
                     self.contentInset = UIEdgeInsetsMake(zb_headRefreshHeight - self.zb_offsetHeight, 0, 0, 0);
                 }];
                 [self setContentOffset:CGPointMake(0, -zb_headRefreshHeight + self.zb_offsetHeight) animated:YES];
-                self.zb_headerView.headerBlock();
+                if (self.zb_headerView.headerBlock) {
+                    self.zb_headerView.headerBlock();
+                }
             }else {//上拉
                 [UIView animateWithDuration:zb_normalAnimationDuration animations:^{
                     CGSize contentSize = self.contentSize;
                     CGFloat contentY = contentSize.height;
                     CGFloat frameY = self.frame.size.height;
-                    float load_y = contentY;
+                    CGFloat load_y = contentY;
                     if (frameY >= contentY) {
                         load_y = frameY;
                         self.contentInset = UIEdgeInsetsMake(-self.zb_offsetHeight, 0, frameY - contentY + self.zb_offsetHeight + zb_footerRefreshHeight, 0);
@@ -113,7 +111,9 @@
                         self.contentInset = UIEdgeInsetsMake(-self.zb_offsetHeight, 0, zb_footerRefreshHeight, 0);
                     }
                 }];
-                self.zb_footerView.footerBlock();
+                if (self.zb_footerView.footerBlock) {
+                    self.zb_footerView.footerBlock();
+                }
             }
             break;
         }
@@ -135,6 +135,13 @@
             break;
     }
 }
+
+//#pragma mark - public methods
+/////开始刷新
+//- (void)zb_beginRefresh {
+////    self.contentInset = UIEdgeInsetsMake(-self.zb_offsetHeight, 0, 0, 0);
+//    [self setContentOffset:CGPointMake(0, 0) animated:YES];
+//}
 
 #pragma mark - get methods
 - (ZBHeaderRefreshingBlock)headerBlock {
@@ -195,7 +202,7 @@
                 CGFloat offsetY = self.contentOffset.y;
                 CGFloat frameY = self.frame.size.height;
                 CGFloat contentY = self.contentSize.height;
-                CGFloat load_Y = offsetY + frameY - contentY + self.zb_offsetHeight;// 根据这个值来判断是否到了tableView的最低点
+                CGFloat load_Y = offsetY + frameY - contentY + self.zb_offsetHeight;// 根据这个值来判断是否到了scrollView的最低点
                 if (frameY > contentY) {
                     load_Y = offsetY;
                 }
@@ -208,7 +215,15 @@
             }
         }else {///松手
             if (self.zb_refreshState == ZB_RefreshStateWillBeginRefresh) {
-                self.zb_refreshState = ZB_RefreshStateRefreshing;
+                if (self.contentOffset.y < self.zb_offsetHeight) {//下拉
+                    if (self.zb_headerView) {
+                        self.zb_refreshState = ZB_RefreshStateRefreshing;
+                    }
+                }else {//上拉
+                    if (self.zb_footerView) {
+                        self.zb_refreshState = ZB_RefreshStateRefreshing;
+                    }
+                }
             }
         }
     }
@@ -243,7 +258,6 @@
             [self removeObserver:self forKeyPath:@"contentSize"];
         }
     }
-
 }
 
 @end

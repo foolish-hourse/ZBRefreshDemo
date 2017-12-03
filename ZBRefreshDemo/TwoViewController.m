@@ -7,11 +7,9 @@
 //
 
 #import "TwoViewController.h"
-#import "ViewController.h"
 #import "ZBRefresh.h"
 #import "MJRefresh.h"
 #import "Masonry.h"
-
 
 @interface TwoViewController () <UITableViewDataSource, UITableViewDelegate>
 ///列表视图
@@ -50,7 +48,8 @@
 #pragma mark - view Func
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = @"ZBRefreshDemo";
+    self.navigationItem.title = @"Second";
+    self.view.backgroundColor = [UIColor whiteColor];
     ///初始化数据
     [self initData];
     self.tableView.hidden = NO;
@@ -89,8 +88,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSLog(@"indexpath:%ld",(long)indexPath.row);
-    ViewController *vc = [[ViewController alloc] init];
-    [self.navigationController pushViewController:vc animated:YES];
+
 }
 
 #pragma mark - test data
